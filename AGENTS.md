@@ -1,5 +1,5 @@
 <!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Instructions for AI agents working with Next.js code
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+This guidance is intended for code-generation agents. Do not rely only on training data or assumptions about older Next.js conventions; verify APIs, file structure, and deprecations against the current stable Next.js documentation before writing code: https://nextjs.org/docs
 <!-- END:nextjs-agent-rules -->
