@@ -63,18 +63,22 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = (user as Record<string, unknown>).role
-        token.subscriptionTier = (user as Record<string, unknown>).subscriptionTier
-        token.kycStatus = (user as Record<string, unknown>).kycStatus
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const u = user as any
+        token.role = u.role
+        token.subscriptionTier = u.subscriptionTier
+        token.kycStatus = u.kycStatus
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as Record<string, unknown>).id = token.id
-        ;(session.user as Record<string, unknown>).role = token.role
-        ;(session.user as Record<string, unknown>).subscriptionTier = token.subscriptionTier
-        ;(session.user as Record<string, unknown>).kycStatus = token.kycStatus
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const s = session.user as any
+        s.id = token.id
+        s.role = token.role
+        s.subscriptionTier = token.subscriptionTier
+        s.kycStatus = token.kycStatus
       }
       return session
     },

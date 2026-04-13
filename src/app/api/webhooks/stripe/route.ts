@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
             data: {
               transferId,
               status: 'FAILED',
-              notes: `Payment failed: ${paymentIntent.last_payment_error?.message || 'Unknown error'}`,
+              notes: `Payment failed`,
               actor: 'system',
             },
           })
@@ -88,7 +88,6 @@ export async function POST(req: NextRequest) {
         const priceId = subscription.items.data[0]?.price.id
         let tier: 'FREE' | 'PLUS' | 'PREMIUM' | 'BUSINESS' = 'FREE'
 
-        // Map Stripe price IDs to subscription tiers
         if (priceId === process.env.STRIPE_PLUS_PRICE_ID) tier = 'PLUS'
         else if (priceId === process.env.STRIPE_PREMIUM_PRICE_ID) tier = 'PREMIUM'
         else if (priceId === process.env.STRIPE_BUSINESS_PRICE_ID) tier = 'BUSINESS'
@@ -97,7 +96,7 @@ export async function POST(req: NextRequest) {
           where: { id: userId },
           data: {
             subscriptionTier: tier,
-            subscriptionExpiry: new Date(subscription.current_period_end * 1000),
+            subscriptionExpiry: new Date(),
           },
         })
       }

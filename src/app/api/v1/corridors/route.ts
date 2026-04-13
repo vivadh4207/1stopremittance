@@ -7,30 +7,26 @@ export async function GET() {
       where: { isActive: true },
       select: {
         id: true,
+        sendCountry: true,
+        receiveCountry: true,
         sendCurrency: true,
         receiveCurrency: true,
-        sendCountryCode: true,
-        receiveCountryCode: true,
         fxMarkupPercent: true,
         minTransferAmount: true,
         maxTransferAmount: true,
-        deliveryMethods: true,
-        estimatedDeliveryMinutes: true,
       },
       orderBy: [{ sendCurrency: 'asc' }, { receiveCurrency: 'asc' }],
     })
 
     const formatted = corridors.map((c) => ({
       id: c.id,
+      sendCountry: c.sendCountry,
+      receiveCountry: c.receiveCountry,
       sendCurrency: c.sendCurrency,
       receiveCurrency: c.receiveCurrency,
-      sendCountryCode: c.sendCountryCode,
-      receiveCountryCode: c.receiveCountryCode,
       fxMarkupPercent: Number(c.fxMarkupPercent),
       minTransferAmount: Number(c.minTransferAmount),
       maxTransferAmount: Number(c.maxTransferAmount),
-      deliveryMethods: c.deliveryMethods,
-      estimatedDeliveryMinutes: c.estimatedDeliveryMinutes,
     }))
 
     return successResponse(formatted)
