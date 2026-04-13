@@ -1,81 +1,57 @@
 export const APP_NAME = '1StopRemittance'
-export const APP_DESCRIPTION = 'Send money worldwide with the best rates and lowest fees'
+export const APP_DESCRIPTION = 'Compare money transfer rates. Send smarter to Nigeria & Philippines.'
 
-export const RATE_LOCK_DURATION = {
-  FREE: 15 * 60 * 1000,      // 15 minutes
-  PLUS: 30 * 60 * 1000,      // 30 minutes
-  PREMIUM: 60 * 60 * 1000,   // 60 minutes
-  BUSINESS: 120 * 60 * 1000, // 120 minutes
-} as const
+export const PROVIDERS = [
+  { id: 'wise', name: 'Wise', logo: '🦉', rating: 4.8, reviews: '142K', speed: '1-2 hrs', color: '#9FE870', url: 'https://wise.com' },
+  { id: 'remitly', name: 'Remitly', logo: '💸', rating: 4.6, reviews: '89K', speed: 'Minutes', color: '#1B75BC', url: 'https://remitly.com' },
+  { id: 'westernunion', name: 'Western Union', logo: '🟡', rating: 4.1, reviews: '67K', speed: 'Minutes', color: '#FFDD00', url: 'https://westernunion.com' },
+  { id: 'xoom', name: 'Xoom (PayPal)', logo: '🅿️', rating: 4.3, reviews: '34K', speed: '1-3 days', color: '#0070BA', url: 'https://xoom.com' },
+  { id: 'worldremit', name: 'WorldRemit', logo: '🌍', rating: 4.5, reviews: '52K', speed: 'Minutes', color: '#7B2D8E', url: 'https://worldremit.com' },
+  { id: 'ofx', name: 'OFX', logo: '💱', rating: 4.4, reviews: '28K', speed: '1-2 days', color: '#00264D', url: 'https://ofx.com' },
+  { id: 'moneygram', name: 'MoneyGram', logo: '🔵', rating: 4.0, reviews: '45K', speed: 'Minutes', color: '#FF6600', url: 'https://moneygram.com' },
+  { id: 'sendwave', name: 'Sendwave', logo: '⚡', rating: 4.5, reviews: '19K', speed: '1 day', color: '#6C5CE7', url: 'https://sendwave.com' },
+] as const
 
-export const SUBSCRIPTION_PRICES = {
-  FREE: 0,
-  PLUS: 4.99,
-  PREMIUM: 14.99,
-  BUSINESS: 49.99,
-} as const
+export const CURRENCIES = [
+  { code: 'USD', name: 'US Dollar', flag: '🇺🇸', symbol: '$' },
+  { code: 'NGN', name: 'Nigerian Naira', flag: '🇳🇬', symbol: '₦' },
+  { code: 'PHP', name: 'Philippine Peso', flag: '🇵🇭', symbol: '₱' },
+  { code: 'INR', name: 'Indian Rupee', flag: '🇮🇳', symbol: '₹' },
+  { code: 'GBP', name: 'British Pound', flag: '🇬🇧', symbol: '£' },
+  { code: 'EUR', name: 'Euro', flag: '🇪🇺', symbol: '€' },
+  { code: 'MXN', name: 'Mexican Peso', flag: '🇲🇽', symbol: '$' },
+  { code: 'PKR', name: 'Pakistani Rupee', flag: '🇵🇰', symbol: '₨' },
+  { code: 'GHS', name: 'Ghanaian Cedi', flag: '🇬🇭', symbol: '₵' },
+  { code: 'KES', name: 'Kenyan Shilling', flag: '🇰🇪', symbol: 'KSh' },
+  { code: 'BDT', name: 'Bangladeshi Taka', flag: '🇧🇩', symbol: '৳' },
+  { code: 'CAD', name: 'Canadian Dollar', flag: '🇨🇦', symbol: 'C$' },
+] as const
 
-export const FX_MARKUP_DISCOUNT = {
-  FREE: 0,
-  PLUS: 0.2,
-  PREMIUM: 0.5,
-  BUSINESS: 0.8,
-} as const
-
-export const FEE_DISCOUNT_PERCENT = {
-  FREE: 0,
-  PLUS: 15,
-  PREMIUM: 40,
-  BUSINESS: 60,
-} as const
-
-export const REWARD_POINTS_MULTIPLIER = {
-  FREE: 1,
-  PLUS: 1.5,
-  PREMIUM: 2,
-  BUSINESS: 3,
-} as const
-
-export const POINTS_PER_100_USD = 10
-export const POINTS_TO_DOLLAR = 100 // 100 points = $1
-
-export const DAILY_LIMITS = {
-  FREE: 2500,
-  PLUS: 5000,
-  PREMIUM: 25000,
-  BUSINESS: 100000,
-} as const
-
-export const TRANSFER_STATUS_LABELS: Record<string, string> = {
-  INITIATED: 'Initiated',
-  PAYMENT_PENDING: 'Awaiting Payment',
-  PAYMENT_RECEIVED: 'Payment Received',
-  COMPLIANCE_REVIEW: 'Under Review',
-  COMPLIANCE_HOLD: 'On Hold',
-  PROCESSING: 'Processing',
-  SENT_TO_PARTNER: 'Sent to Partner',
-  IN_TRANSIT: 'In Transit',
-  AVAILABLE_FOR_PICKUP: 'Ready for Pickup',
-  DELIVERED: 'Delivered',
-  COMPLETED: 'Completed',
-  CANCELLED: 'Cancelled',
-  REFUNDED: 'Refunded',
-  FAILED: 'Failed',
+export const BASE_RATES: Record<string, number> = {
+  USD: 1, NGN: 1550, PHP: 56.2, INR: 83.5, GBP: 0.79, EUR: 0.92,
+  MXN: 17.1, PKR: 278, GHS: 14.8, KES: 153, BDT: 110, CAD: 1.36,
 }
 
-export const DELIVERY_METHOD_LABELS: Record<string, string> = {
-  BANK_DEPOSIT: 'Bank Deposit',
-  MOBILE_WALLET: 'Mobile Wallet',
-  CASH_PICKUP: 'Cash Pickup',
-  AIRTIME_TOPUP: 'Airtime Top-up',
-  HOME_DELIVERY: 'Home Delivery',
+export const FEATURED_CORRIDORS = [
+  { from: 'USD', to: 'NGN', label: 'USA to Nigeria', flag: '🇳🇬', slug: 'usd-to-ngn' },
+  { from: 'USD', to: 'PHP', label: 'USA to Philippines', flag: '🇵🇭', slug: 'usd-to-php' },
+  { from: 'USD', to: 'INR', label: 'USA to India', flag: '🇮🇳', slug: 'usd-to-inr' },
+  { from: 'USD', to: 'GHS', label: 'USA to Ghana', flag: '🇬🇭', slug: 'usd-to-ghs' },
+  { from: 'USD', to: 'MXN', label: 'USA to Mexico', flag: '🇲🇽', slug: 'usd-to-mxn' },
+  { from: 'USD', to: 'KES', label: 'USA to Kenya', flag: '🇰🇪', slug: 'usd-to-kes' },
+] as const
+
+export function getRate(from: string, to: string): number {
+  return (BASE_RATES[to] || 1) / (BASE_RATES[from] || 1)
 }
 
-export const PAYMENT_METHOD_LABELS: Record<string, string> = {
-  DEBIT_CARD: 'Debit Card',
-  CREDIT_CARD: 'Credit Card',
-  BANK_TRANSFER: 'Bank Transfer (ACH)',
-  WALLET_BALANCE: 'Wallet Balance',
-  APPLE_PAY: 'Apple Pay',
-  GOOGLE_PAY: 'Google Pay',
+export function generateProviderRates(amount: number, from: string, to: string) {
+  const baseRate = getRate(from, to)
+  return PROVIDERS.map((p) => {
+    const margin = 0.97 + Math.random() * 0.04
+    const rate = baseRate * margin
+    const fee = +(1.5 + Math.random() * 6).toFixed(2)
+    const received = +((amount - fee) * rate).toFixed(2)
+    return { ...p, rate: +rate.toFixed(4), fee, received, total: +amount.toFixed(2) }
+  }).sort((a, b) => b.received - a.received)
 }
