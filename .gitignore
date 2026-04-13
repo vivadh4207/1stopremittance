@@ -19,6 +19,13 @@
 
 # production
 /build
+/dist
+
+# vite (legacy files from old project structure)
+/index.html
+/vite.config.js
+/src/index.css
+/src/main.jsx
 
 # misc
 .DS_Store
