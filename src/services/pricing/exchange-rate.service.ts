@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db'
 import { FX_MARKUP_DISCOUNT } from '@/lib/constants'
-import type { SubscriptionTier } from '@/generated/prisma'
+import type { SubscriptionTier } from '@prisma/client'
 
 // Mock exchange rates for development (mid-market rates)
 const MOCK_RATES: Record<string, number> = {

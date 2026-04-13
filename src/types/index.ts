@@ -1,4 +1,4 @@
-export type { DeliveryMethod, PaymentMethod, TransferStatus, SubscriptionTier, UserRole, KycStatus } from '@/generated/prisma'
+export type { DeliveryMethod, PaymentMethod, TransferStatus, SubscriptionTier, UserRole, KycStatus } from '@prisma/client'
 
 export interface ExchangeRateResult {
   customerRate: number

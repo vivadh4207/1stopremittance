@@ -2,7 +2,7 @@ import { prisma } from '@/lib/db'
 import { RATE_LOCK_DURATION } from '@/lib/constants'
 import { getCustomerRate } from './exchange-rate.service'
 import { calculateFee } from './fee-calculator.service'
-import type { DeliveryMethod, PaymentMethod, SubscriptionTier } from '@/generated/prisma'
+import type { DeliveryMethod, PaymentMethod, SubscriptionTier } from '@prisma/client'
 
 export async function createQuote(
   userId: string,

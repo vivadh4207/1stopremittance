@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db'
 import { FEE_DISCOUNT_PERCENT } from '@/lib/constants'
-import type { DeliveryMethod, PaymentMethod, SubscriptionTier } from '@/generated/prisma'
+import type { DeliveryMethod, PaymentMethod, SubscriptionTier } from '@prisma/client'
 
 interface FeeResult {
   baseFee: number
