@@ -51,6 +51,8 @@ export function getRate(from: string, to: string): number {
  * Exported so consumers can use the same PRNG for deterministic rendering.
  */
 export function mulberry32(seed: number) {
+  // 0x6d2b79f5 is the additive constant from the mulberry32 algorithm
+  // chosen for its good avalanche/distribution properties in 32-bit integers
   return function () {
     seed |= 0; seed = seed + 0x6d2b79f5 | 0
     let t = Math.imul(seed ^ seed >>> 15, 1 | seed)

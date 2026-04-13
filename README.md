@@ -16,7 +16,7 @@ Compare money transfer rates and send smarter to Nigeria, the Philippines, and o
 
 - **Framework** — [Next.js](https://nextjs.org) 15 (App Router)
 - **Styling** — Tailwind CSS v4
-- **Database** — PostgreSQL via [Prisma](https://prisma.io) (schema ready; migrations managed separately)
+- **Database** — PostgreSQL via [Prisma](https://prisma.io) (schema ready; migrations managed via Prisma CLI)
 - **Deployment** — [Vercel](https://vercel.com)
 
 ## Local setup
@@ -33,6 +33,7 @@ Compare money transfer rates and send smarter to Nigeria, the Philippines, and o
 npm install
 
 # 2. Create a .env.local file with your database URL
+# Replace user, password, localhost, and db name with your actual credentials
 echo 'DATABASE_URL="postgresql://user:password@localhost:5432/1stopremittance"' > .env.local
 
 # 3. Push the schema to your database
