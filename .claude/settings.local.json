@@ -1,17 +1,1 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git clone:*)",
-      "Bash(git init:*)",
-      "Bash(git remote:*)",
-      "Bash(git pull:*)",
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --no-turbopack)",
-      "Bash(npm run:*)",
-      "Bash(git add:*)",
-      "Bash(git commit -m ':*)",
-      "Bash(git push:*)",
-      "Bash(gh auth:*)",
-      "Bash(node -e \"const l = require\\('lucide-react'\\); const icons = ['Facebook','Twitter','Instagram','Globe','Send','Mail']; icons.forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")"
-    ]
-  }
-}
+{}
