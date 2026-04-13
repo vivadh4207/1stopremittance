@@ -197,8 +197,8 @@ export default function AdminOverviewPage() {
                 <XAxis dataKey="date" tick={{ fontSize: 12 }} tickLine={false} />
                 <YAxis tick={{ fontSize: 12 }} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
                 <Tooltip
-                  formatter={(value: number, name: string) =>
-                    name === 'revenue' ? [formatCurrency(value, 'USD'), 'Revenue'] : [value, 'Transfers']
+                  formatter={(value, name) =>
+                    name === 'revenue' ? [formatCurrency(Number(value), 'USD'), 'Revenue'] : [value, 'Transfers']
                   }
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#6366f1" strokeWidth={2} fill="url(#revenueGrad)" />

@@ -169,13 +169,13 @@ export default function AnalyticsPage() {
                     innerRadius={60}
                     outerRadius={100}
                     dataKey="value"
-                    label={({ name, percent }: Record<string, unknown>) => `${name ?? ''} ${(((percent as number) ?? 0) * 100).toFixed(0)}%`}
+                    label={(props) => `${props.name ?? ''} ${(((props.percent as number) ?? 0) * 100).toFixed(0)}%`}
                   >
                     {paymentMethodData.map((_, index) => (
                       <Cell key={index} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => [`${value}%`, 'Share']} />
+                  <Tooltip formatter={(value) => [`${value}%`, 'Share']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -198,13 +198,13 @@ export default function AnalyticsPage() {
                     innerRadius={60}
                     outerRadius={100}
                     dataKey="value"
-                    label={({ name, percent }: Record<string, unknown>) => `${name ?? ''} ${(((percent as number) ?? 0) * 100).toFixed(0)}%`}
+                    label={(props) => `${props.name ?? ''} ${(((props.percent as number) ?? 0) * 100).toFixed(0)}%`}
                   >
                     {deliveryMethodData.map((_, index) => (
                       <Cell key={index} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => [`${value}%`, 'Share']} />
+                  <Tooltip formatter={(value) => [`${value}%`, 'Share']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
