@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
-import { PROVIDERS, CURRENCIES, generateProviderRates, getRate } from '@/lib/constants'
+import { PROVIDERS, CURRENCIES, generateProviderRates, getRate, mulberry32 } from '@/lib/constants'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
@@ -166,14 +166,19 @@ export default function ComparePage() {
   const toCurrencyData = CURRENCIES.find((c) => c.code === toCurrency)
   const toSymbol = toCurrencyData?.symbol ?? ''
 
-  // Mock rate history chart data
+  // Mock rate history chart data (deterministic to avoid hydration mismatch)
   const chartData = useMemo(() => {
     const baseRate = getRate(fromCurrency, toCurrency)
     const variation = baseRate * 0.01
     const smallVariation = baseRate * 0.003
+    // Seed by corridor so server/client produce the same values
+    let h = 0
+    for (let i = 0; i < fromCurrency.length; i++) h = (Math.imul(h, 31) + fromCurrency.charCodeAt(i)) | 0
+    for (let i = 0; i < toCurrency.length; i++) h = (Math.imul(h, 31) + toCurrency.charCodeAt(i)) | 0
+    const rand = mulberry32(h >>> 0)
     return Array.from({ length: 30 }, (_, i) => ({
       day: `Day ${i + 1}`,
-      rate: +(baseRate + Math.sin(i / 3) * variation + Math.random() * smallVariation).toFixed(4),
+      rate: +(baseRate + Math.sin(i / 3) * variation + rand() * smallVariation).toFixed(4),
     }))
   }, [fromCurrency, toCurrency])
 

@@ -45,12 +45,35 @@ export function getRate(from: string, to: string): number {
   return (BASE_RATES[to] || 1) / (BASE_RATES[from] || 1)
 }
 
+/**
+ * A simple deterministic pseudo-random number generator (mulberry32).
+ * Returns a seeded function that produces stable floats in [0, 1).
+ * Exported so consumers can use the same PRNG for deterministic rendering.
+ */
+export function mulberry32(seed: number) {
+  return function () {
+    seed |= 0; seed = seed + 0x6d2b79f5 | 0
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed)
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+    return ((t ^ t >>> 14) >>> 0) / 4294967296
+  }
+}
+
+/** Stable seed derived from the corridor and amount so SSR/CSR renders match. */
+function corridorSeed(amount: number, from: string, to: string): number {
+  let h = amount * 31
+  for (let i = 0; i < from.length; i++) h = (Math.imul(h, 31) + from.charCodeAt(i)) | 0
+  for (let i = 0; i < to.length; i++) h = (Math.imul(h, 31) + to.charCodeAt(i)) | 0
+  return h >>> 0
+}
+
 export function generateProviderRates(amount: number, from: string, to: string) {
   const baseRate = getRate(from, to)
+  const rand = mulberry32(corridorSeed(amount, from, to))
   return PROVIDERS.map((p) => {
-    const margin = 0.97 + Math.random() * 0.04
+    const margin = 0.97 + rand() * 0.04
     const rate = baseRate * margin
-    const fee = +(1.5 + Math.random() * 6).toFixed(2)
+    const fee = +(1.5 + rand() * 6).toFixed(2)
     const received = +((amount - fee) * rate).toFixed(2)
     return { ...p, rate: +rate.toFixed(4), fee, received, total: +amount.toFixed(2) }
   }).sort((a, b) => b.received - a.received)
