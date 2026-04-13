@@ -456,7 +456,7 @@ export default function ComparePage() {
 
                   {/* Right: CTA */}
                   <a
-                    href="#"
+                    href={provider.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
