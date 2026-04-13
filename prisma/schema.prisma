@@ -3,23 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String       @unique
-  name        String?
-  transactions Transaction[]
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
 }
 
-model Transaction {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  amount    Float
-  currency  String
-  status    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-}
