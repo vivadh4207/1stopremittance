@@ -16,10 +16,10 @@ const resourceLinks = [
 ]
 
 const corridorLinks = [
-  { href: '/corridors/usd-ngn', label: 'USD to NGN' },
-  { href: '/corridors/usd-php', label: 'USD to PHP' },
-  { href: '/corridors/usd-inr', label: 'USD to INR' },
-  { href: '/corridors/usd-ghs', label: 'USD to GHS' },
+  { href: '/corridors/usd-to-ngn', label: 'USD to NGN' },
+  { href: '/corridors/usd-to-php', label: 'USD to PHP' },
+  { href: '/corridors/usd-to-inr', label: 'USD to INR' },
+  { href: '/corridors/usd-to-ghs', label: 'USD to GHS' },
 ]
 
 const socialLinks = [

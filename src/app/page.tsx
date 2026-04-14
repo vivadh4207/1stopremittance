@@ -28,8 +28,8 @@ import {
   CURRENCIES,
   FEATURED_CORRIDORS,
   getRate,
-  BASE_RATES,
 } from '@/lib/constants'
+import { useRates } from '@/hooks/use-rates'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 
@@ -153,7 +153,14 @@ function HeroSection() {
   }, [])
 
   const amount = parseFloat(sendAmount) || 0
-  const rate = getRate(sendCurrency, receiveCurrency)
+
+  // Fetch live rates from API
+  const { data: rateData, loading: ratesLoading } = useRates({
+    from: sendCurrency,
+    to: receiveCurrency,
+  })
+  // Use live rate if available, fallback to static
+  const rate = rateData?.midMarketRate ?? getRate(sendCurrency, receiveCurrency)
   const receivedAmount = (amount * rate).toFixed(2)
 
   const sendCurrencyObj = CURRENCIES.find((c) => c.code === sendCurrency)
@@ -388,19 +395,24 @@ function HeroSection() {
 
 function FeaturedCorridors() {
   const popular = ['usd-to-ngn', 'usd-to-php']
+  // Fetch all rates once for corridor cards
+  const { data: rateData } = useRates({ from: 'USD', to: 'NGN' })
 
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
           badge="Top Routes"
-          title="Popular Corridors for Diaspora"
+          title={<>Popular Corridors for Diaspora {rateData?.source && rateData.source !== 'fallback' && <span className="inline-flex items-center gap-1 ml-2 text-xs font-normal text-emerald-400"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />Live</span>}</>}
           subtitle="Real-time mid-market rates for the most popular remittance corridors from the US."
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURED_CORRIDORS.map((corridor) => {
-            const rate = getRate(corridor.from, corridor.to)
+            // Use live rates if available, fallback to static
+            const rate = rateData?.rates
+              ? (rateData.rates[corridor.to] || 1) / (rateData.rates[corridor.from] || 1)
+              : getRate(corridor.from, corridor.to)
             const isMostPopular = popular.includes(corridor.slug)
             return (
               <Link key={corridor.slug} href={`/corridors/${corridor.slug}`}>

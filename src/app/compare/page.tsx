@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { PROVIDERS, CURRENCIES, generateProviderRates, getRate, mulberry32 } from '@/lib/constants'
+import { useRates } from '@/hooks/use-rates'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
@@ -135,12 +136,21 @@ export default function ComparePage() {
   const [showChart, setShowChart] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
-  // Generate provider rates (re‑generate on dependency change)
-  const providers = useMemo(
-    () => generateProviderRates(amount, fromCurrency, toCurrency),
+  // Fetch live rates from API
+  const { data: rateData, loading: ratesLoading, refetch, source, lastUpdated } = useRates({
+    from: fromCurrency,
+    to: toCurrency,
+    amount,
+  })
+
+  // Use live provider rates when available, fallback to static
+  const providers = useMemo(() => {
+    if (rateData?.providers && rateData.providers.length > 0) {
+      return rateData.providers
+    }
+    return generateProviderRates(amount, fromCurrency, toCurrency)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [amount, fromCurrency, toCurrency, refreshKey],
-  )
+  }, [rateData, amount, fromCurrency, toCurrency, refreshKey])
 
   // Sort providers
   const sorted = useMemo(() => {
@@ -249,13 +259,22 @@ export default function ComparePage() {
             {/* Refresh */}
             <button
               type="button"
-              onClick={() => setRefreshKey((k) => k + 1)}
-              className="mb-0.5 flex h-11 items-center gap-2 self-end rounded-xl border border-white/10 bg-gray-800 px-4 text-sm text-gray-400 transition hover:border-emerald-400/40 hover:text-emerald-400"
+              onClick={() => { refetch(); setRefreshKey((k) => k + 1) }}
+              disabled={ratesLoading}
+              className="mb-0.5 flex h-11 items-center gap-2 self-end rounded-xl border border-white/10 bg-gray-800 px-4 text-sm text-gray-400 transition hover:border-emerald-400/40 hover:text-emerald-400 disabled:opacity-50"
             >
-              <RefreshCw className="h-4 w-4" />
-              Refresh
+              <RefreshCw className={cn('h-4 w-4', ratesLoading && 'animate-spin')} />
+              {ratesLoading ? 'Loading...' : 'Refresh'}
             </button>
           </div>
+          {/* Rate source indicator */}
+          {source && (
+            <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Rates from {source === 'fallback' ? 'cached data' : source}
+              {lastUpdated && <> &middot; Updated {new Date(lastUpdated).toLocaleTimeString()}</>}
+            </div>
+          )}
         </div>
 
         {/* ---- Savings Banner ---- */}

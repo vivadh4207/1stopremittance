@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { generateProviderRates, CURRENCIES } from '@/lib/constants'
+import { useRates } from '@/hooks/use-rates'
+import { getAdvisorsForCorridor, type Advisor } from '@/lib/advisors'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import {
@@ -18,6 +20,10 @@ import {
   Banknote,
   Lightbulb,
   Mail,
+  BadgeCheck,
+  MapPin,
+  Crown,
+  Award,
 } from 'lucide-react'
 
 const CORRIDOR_DATA: Record<string, {
@@ -166,7 +172,16 @@ export default function CorridorDetailPage() {
     )
   }
 
-  const providers = generateProviderRates(amount, corridor.from, corridor.to)
+  // Fetch live rates
+  const { data: rateData, source, lastUpdated } = useRates({
+    from: corridor.from,
+    to: corridor.to,
+    amount,
+  })
+  // Use live providers if available, fallback to static
+  const providers = rateData?.providers && rateData.providers.length > 0
+    ? rateData.providers
+    : generateProviderRates(amount, corridor.from, corridor.to)
   const toCurrency = CURRENCIES.find((c) => c.code === corridor.to)
 
   return (
@@ -210,8 +225,14 @@ export default function CorridorDetailPage() {
                   <span className="text-sm text-gray-400">{corridor.from}</span>
                 </div>
               </div>
-              <div className="text-sm text-gray-400 self-end pb-3">
+              <div className="text-sm text-gray-400 self-end pb-3 flex items-center gap-2">
                 Comparing 8 providers for {corridor.from} → {corridor.to}
+                {source && source !== 'fallback' && (
+                  <span className="inline-flex items-center gap-1 text-xs text-emerald-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Live
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -325,6 +346,67 @@ export default function CorridorDetailPage() {
               ))}
             </div>
           </div>
+
+          {/* Advisor Section */}
+          {(() => {
+            const advisors = getAdvisorsForCorridor(slug)
+            if (advisors.length === 0) return null
+            return (
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <BadgeCheck className="h-6 w-6 text-emerald-400" />
+                  Expert Advisors for This Corridor
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {advisors.slice(0, 4).map((advisor) => {
+                    const initials = advisor.name.split(' ').map((n: string) => n[0]).join('')
+                    return (
+                      <div key={advisor.id} className={cn(
+                        'bg-gray-900/50 border rounded-2xl p-5',
+                        advisor.tier === 'premium' ? 'border-emerald-400/30' :
+                        advisor.tier === 'pro' ? 'border-cyan-400/20' : 'border-white/10'
+                      )}>
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 text-sm font-bold text-gray-900 flex-shrink-0">
+                            {initials}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-white font-bold text-sm truncate">{advisor.name}</span>
+                              {advisor.verified && <BadgeCheck className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />}
+                              {advisor.tier !== 'basic' && (
+                                <span className={cn(
+                                  'px-1.5 py-0.5 rounded text-[10px] font-semibold',
+                                  advisor.tier === 'premium' ? 'bg-emerald-400/20 text-emerald-400' : 'bg-cyan-400/10 text-cyan-400'
+                                )}>
+                                  {advisor.tier === 'premium' ? 'Premium' : 'Pro'}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-400">{advisor.title}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
+                              <span className="text-xs text-yellow-400">{advisor.rating}</span>
+                              <span className="text-xs text-gray-500">· <MapPin className="inline h-3 w-3" /> {advisor.location}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-400 line-clamp-2 mb-3">{advisor.bio}</p>
+                        <a href={`mailto:${advisor.contactEmail}`} className="block w-full text-center py-2 bg-white/10 rounded-lg text-sm text-white font-medium hover:bg-white/15 transition-colors">
+                          Contact Advisor
+                        </a>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="text-center mt-4">
+                  <Link href="/advisors" className="text-sm text-emerald-400 hover:text-emerald-300 font-medium">
+                    View all advisors →
+                  </Link>
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Email CTA */}
           <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/20 rounded-3xl p-8 text-center">
