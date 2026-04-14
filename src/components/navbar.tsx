@@ -9,6 +9,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/compare', label: 'Compare Rates' },
   { href: '/corridors', label: 'Corridors' },
+  { href: '/advisors', label: 'Advisors' },
   { href: '/guides', label: 'Guides' },
   { href: '/about', label: 'About' },
 ]
