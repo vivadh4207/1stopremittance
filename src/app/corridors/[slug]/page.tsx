@@ -154,6 +154,15 @@ export default function CorridorDetailPage() {
   const corridor = CORRIDOR_DATA[slug]
   const [amount, setAmount] = useState(1000)
 
+  // Hooks must be called unconditionally — before any early return.
+  // Fall back to safe defaults when the corridor isn't found so useRates
+  // always receives valid strings and the hook order never changes.
+  const { data: rateData, source, lastUpdated } = useRates({
+    from: corridor?.from ?? 'USD',
+    to: corridor?.to ?? 'USD',
+    amount,
+  })
+
   if (!corridor) {
     return (
       <>
@@ -171,13 +180,6 @@ export default function CorridorDetailPage() {
       </>
     )
   }
-
-  // Fetch live rates
-  const { data: rateData, source, lastUpdated } = useRates({
-    from: corridor.from,
-    to: corridor.to,
-    amount,
-  })
   // Use live providers if available, fallback to static
   const providers = rateData?.providers && rateData.providers.length > 0
     ? rateData.providers
@@ -213,7 +215,7 @@ export default function CorridorDetailPage() {
           <div className="bg-gray-900/50 border border-white/10 rounded-2xl p-6 mb-8">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex-1 min-w-[200px]">
-                <label className="block text-xs text-gray-400 font-medium mb-1">You send</label>
+                <label className="block text-xs text-gray-400 font-medium mb-2">You send</label>
                 <div className="flex items-center gap-2 bg-gray-800/60 border border-white/10 rounded-xl px-4 py-3">
                   <span className="text-gray-400">{corridor.fromSymbol}</span>
                   <input

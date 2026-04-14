@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { LEGAL_PRODUCTS } from '@/lib/legal-services'
 
 const BASE_URL = 'https://1stopremittance.com'
 
@@ -29,6 +30,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/corridors`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
     { url: `${BASE_URL}/guides`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
     { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
+    // Legal services pages
+    { url: `${BASE_URL}/legal-services`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/search`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.6 },
+    { url: `${BASE_URL}/privacy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
   ]
 
   const corridorPages = CORRIDOR_SLUGS.map((slug) => ({
@@ -45,5 +50,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...corridorPages, ...guidePages]
+  const legalServicePages = LEGAL_PRODUCTS.map((product) => ({
+    url: `${BASE_URL}/legal-services/${product.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
+  return [...staticPages, ...corridorPages, ...guidePages, ...legalServicePages]
 }

@@ -257,8 +257,8 @@ function HeroSection() {
               </div>
 
               {/* You send */}
-              <div>
-                <label className="mb-1.5 block text-sm text-gray-400">
+              <div className="relative z-20">
+                <label className="mb-2 block text-sm font-medium text-gray-400">
                   You send
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-gray-800/60 px-4 py-3">
@@ -282,7 +282,7 @@ function HeroSection() {
                       <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                     {showSendDropdown && (
-                      <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
                         {CURRENCIES.map((c) => (
                           <button
                             key={c.code}
@@ -322,8 +322,8 @@ function HeroSection() {
               </div>
 
               {/* They receive */}
-              <div>
-                <label className="mb-1.5 block text-sm text-gray-400">
+              <div className="relative z-10">
+                <label className="mb-2 block text-sm font-medium text-gray-400">
                   They receive
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-gray-800/60 px-4 py-3">
@@ -344,7 +344,7 @@ function HeroSection() {
                       <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                     {showReceiveDropdown && (
-                      <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
                         {CURRENCIES.map((c) => (
                           <button
                             key={c.code}
@@ -726,6 +726,63 @@ function EmailCTA() {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Section 8 : Business Services Promo                               */
+/* ------------------------------------------------------------------ */
+
+function BusinessServicesPromo() {
+  const services = [
+    { icon: '🏢', name: 'Form an LLC', price: '$79', href: '/legal-services/llc-formation', desc: 'Protect your assets' },
+    { icon: '🔢', name: 'Get an EIN', price: '$79', href: '/legal-services/ein-filing', desc: 'Required for banking' },
+    { icon: '™️', name: 'Trademark', price: '$299', href: '/legal-services/trademark-registration', desc: 'Protect your brand' },
+    { icon: '📬', name: 'Registered Agent', price: '$99/yr', href: '/legal-services/registered-agent', desc: 'Stay compliant' },
+  ]
+
+  return (
+    <section className="relative py-24 overflow-hidden border-t border-white/10">
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5" />
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+        <SectionHeading
+          badge="New: Business Services"
+          title={<>Start Your Business in the <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">US Today</span></>}
+          subtitle="We now offer business formation services for diaspora entrepreneurs. Form an LLC, get your EIN, register a trademark — all in one place."
+        />
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+          {services.map((s) => (
+            <Link key={s.name} href={s.href}>
+              <GlassCard className="group p-5 hover:border-emerald-400/30 transition-colors cursor-pointer">
+                <div className="text-3xl mb-3">{s.icon}</div>
+                <h3 className="text-base font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                  {s.name}
+                </h3>
+                <p className="text-xs text-gray-500 mt-1">{s.desc}</p>
+                <p className="mt-3 text-xl font-bold text-emerald-400">
+                  {s.price}
+                  <span className="text-xs text-gray-500 font-normal ml-1">+ state fees</span>
+                </p>
+              </GlassCard>
+            </Link>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <Link
+            href="/legal-services"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 px-7 py-3 text-sm font-semibold text-emerald-400 hover:bg-emerald-400/10 transition-colors"
+          >
+            View All Business Services
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <p className="mt-4 text-xs text-gray-500">
+            Not a law firm. Document preparation services only. Public information provided for educational purposes.
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -737,6 +794,7 @@ export default function HomePage() {
         <HeroSection />
         <FeaturedCorridors />
         <HowItWorks />
+        <BusinessServicesPromo />
         <ProviderShowcase />
         <TrustSecurity />
         <Testimonials />

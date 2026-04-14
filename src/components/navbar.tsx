@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Send, Menu, X } from 'lucide-react'
+import { Send, Menu, X, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/compare', label: 'Compare Rates' },
   { href: '/corridors', label: 'Corridors' },
-  { href: '/advisors', label: 'Advisors' },
+  { href: '/legal-services', label: 'Business Services', badge: 'New' },
   { href: '/guides', label: 'Guides' },
+  { href: '/search', label: 'Search', icon: true },
   { href: '/about', label: 'About' },
 ]
 
@@ -46,14 +47,20 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-gray-400 transition-colors hover:text-white"
+              className="relative text-sm text-gray-400 transition-colors hover:text-white flex items-center gap-1"
             >
+              {link.icon && <Search className="h-3.5 w-3.5" />}
               {link.label}
+              {link.badge && (
+                <span className="ml-1 rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-gray-950 uppercase">
+                  {link.badge}
+                </span>
+              )}
             </Link>
           ))}
         </div>
@@ -91,10 +98,16 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-400 transition-colors hover:text-white"
+                className="flex items-center gap-2 text-gray-400 transition-colors hover:text-white"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
+                {link.icon && <Search className="h-4 w-4" />}
                 {link.label}
+                {link.badge && (
+                  <span className="rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-gray-950 uppercase">
+                    {link.badge}
+                  </span>
+                )}
               </Link>
             ))}
             <Link
