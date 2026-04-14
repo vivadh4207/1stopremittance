@@ -726,15 +726,15 @@ function EmailCTA() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Section 8 : Business Services Promo                               */
+/*  Section 8 : Premium & API Promo                                   */
 /* ------------------------------------------------------------------ */
 
-function BusinessServicesPromo() {
-  const services = [
-    { icon: '🏢', name: 'Form an LLC', price: '$79', href: '/legal-services/llc-formation', desc: 'Protect your assets' },
-    { icon: '🔢', name: 'Get an EIN', price: '$79', href: '/legal-services/ein-filing', desc: 'Required for banking' },
-    { icon: '™️', name: 'Trademark', price: '$299', href: '/legal-services/trademark-registration', desc: 'Protect your brand' },
-    { icon: '📬', name: 'Registered Agent', price: '$99/yr', href: '/legal-services/registered-agent', desc: 'Stay compliant' },
+function PremiumPromo() {
+  const perks = [
+    { icon: '🔔', title: 'Unlimited Rate Alerts', desc: 'Get notified the moment your corridor hits your target rate — via SMS or email.' },
+    { icon: '📊', title: '90-Day Rate History', desc: 'See exactly when rates peak and trough. Send at the right moment, every time.' },
+    { icon: '🎯', title: 'Best-Time Predictions', desc: 'Our model analyzes patterns and tells you if you should send now or wait.' },
+    { icon: '🔌', title: 'API & White-Label', desc: 'Power your app or bank with live rates. Embed our widget under your brand.' },
   ]
 
   return (
@@ -742,40 +742,36 @@ function BusinessServicesPromo() {
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5" />
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
-          badge="New: Business Services"
-          title={<>Start Your Business in the <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">US Today</span></>}
-          subtitle="We now offer business formation services for diaspora entrepreneurs. Form an LLC, get your EIN, register a trademark — all in one place."
+          badge="Pro & API"
+          title={<>Save More with <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Pro Alerts</span></>}
+          subtitle="Free comparison gets you started. Pro alerts and rate predictions get your family more money on every transfer."
         />
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-          {services.map((s) => (
-            <Link key={s.name} href={s.href}>
-              <GlassCard className="group p-5 hover:border-emerald-400/30 transition-colors cursor-pointer">
-                <div className="text-3xl mb-3">{s.icon}</div>
-                <h3 className="text-base font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                  {s.name}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1">{s.desc}</p>
-                <p className="mt-3 text-xl font-bold text-emerald-400">
-                  {s.price}
-                  <span className="text-xs text-gray-500 font-normal ml-1">+ state fees</span>
-                </p>
-              </GlassCard>
-            </Link>
+          {perks.map((p) => (
+            <GlassCard key={p.title} className="p-5">
+              <div className="text-3xl mb-3">{p.icon}</div>
+              <h3 className="text-base font-semibold text-white">{p.title}</h3>
+              <p className="text-xs text-gray-400 mt-1 leading-relaxed">{p.desc}</p>
+            </GlassCard>
           ))}
         </div>
 
-        <div className="text-center">
+        <div className="flex flex-wrap justify-center gap-4">
           <Link
-            href="/legal-services"
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 px-7 py-3 text-sm font-semibold text-emerald-400 hover:bg-emerald-400/10 transition-colors"
+            href="/pricing"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-7 py-3 text-sm font-semibold text-gray-950 hover:opacity-90 transition-opacity"
           >
-            View All Business Services
+            View Plans — From Free
             <ArrowRight className="h-4 w-4" />
           </Link>
-          <p className="mt-4 text-xs text-gray-500">
-            Not a law firm. Document preparation services only. Public information provided for educational purposes.
-          </p>
+          <Link
+            href="/api-access"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-7 py-3 text-sm font-semibold text-white hover:bg-white/5 transition-colors"
+          >
+            Explore the API
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>
@@ -794,7 +790,7 @@ export default function HomePage() {
         <HeroSection />
         <FeaturedCorridors />
         <HowItWorks />
-        <BusinessServicesPromo />
+        <PremiumPromo />
         <ProviderShowcase />
         <TrustSecurity />
         <Testimonials />

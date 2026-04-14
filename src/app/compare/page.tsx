@@ -53,7 +53,7 @@ function CurrencySelect({
   )
 
   return (
-    <div ref={ref} className="relative z-10">
+    <div ref={ref} className={cn('relative', open ? 'z-30' : 'z-10')}>
       <label className="mb-2 block text-xs font-medium text-gray-500">{label}</label>
       <button
         type="button"
@@ -216,7 +216,7 @@ export default function ComparePage() {
         </div>
 
         {/* ---- Controls Bar ---- */}
-        <div className="mb-8 rounded-2xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-xl">
+        <div className="relative z-20 mb-8 rounded-2xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-xl">
           <div className="flex flex-wrap items-end gap-4">
             {/* Amount */}
             <div>
@@ -478,11 +478,11 @@ export default function ComparePage() {
                     </div>
                   </div>
 
-                  {/* Right: CTA */}
+                  {/* Right: CTA — routes through affiliate tracker */}
                   <a
-                    href={provider.url}
+                    href={`/api/affiliate/click?provider=${provider.id}&corridor=${fromCurrency.toLowerCase()}-${toCurrency.toLowerCase()}&amount=${amount}`}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer sponsored"
                     className={cn(
                       'inline-flex items-center gap-1 self-start whitespace-nowrap rounded-xl px-5 py-2.5 text-sm font-semibold transition sm:self-center',
                       isTop
@@ -501,8 +501,10 @@ export default function ComparePage() {
 
         {/* ---- Disclaimer ---- */}
         <p className="mt-8 text-center text-xs text-gray-600">
-          Rates shown are indicative and may differ from actual provider rates.
-          1StopRemittance earns commissions from partner links.
+          Rates shown are indicative and updated live — they may vary slightly at checkout.
+          1StopRemittance earns affiliate commissions when you click through and complete a transfer.
+          This never influences the order of results — providers are ranked by amount received.{' '}
+          <a href="/pricing" className="text-gray-500 hover:text-gray-400 underline">See how we make money →</a>
         </p>
       </main>
 
