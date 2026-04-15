@@ -16,18 +16,18 @@ interface Message {
 const GREETING: Message = {
   id: 'greeting',
   role: 'bot',
-  text: "👋 Hi! I'm your 1Stop guide. I can help you compare remittance rates, form an LLC, get an EIN, and more. What do you need today?",
+  text: "👋 Hi! I'm your 1Stop guide. I can help you compare remittance rates, find the best provider, or connect you with an advisor. What do you need today?",
   action: undefined,
   timestamp: new Date(),
 }
 
 const QUICK_PROMPTS = [
-  '💸 Compare remittance rates',
-  '🏢 Form an LLC',
-  '🔢 Get an EIN',
-  '📊 Send to Nigeria',
+  '💸 Compare rates',
+  '🇳🇬 Send to Nigeria',
   '🇵🇭 Send to Philippines',
-  '📋 All business services',
+  '💡 Avoid hidden fees',
+  '🧑‍💼 Find an advisor',
+  '📖 Read guides',
 ]
 
 export function NavBot() {
@@ -248,7 +248,7 @@ export function NavBot() {
                   </button>
                 </form>
                 <p className="mt-1.5 text-center text-[10px] text-gray-600">
-                  Not legal advice. For general information only.
+                  For general information only. Always verify rates at the provider.
                 </p>
               </div>
             </>
