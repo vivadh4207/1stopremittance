@@ -1,26 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Send, Mail, Globe, MessageCircle, Rss, Share2 } from 'lucide-react'
-
-const companyLinks = [
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
-  { href: '/careers', label: 'Careers' },
-]
-
-const resourceLinks = [
-  { href: '/guides', label: 'Guides' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/faqs', label: 'FAQs' },
-]
-
-const corridorLinks = [
-  { href: '/corridors/usd-to-ngn', label: 'USD to NGN' },
-  { href: '/corridors/usd-to-php', label: 'USD to PHP' },
-  { href: '/corridors/usd-to-inr', label: 'USD to INR' },
-  { href: '/corridors/usd-to-ghs', label: 'USD to GHS' },
-]
 
 const socialLinks = [
   { href: 'https://facebook.com', icon: Share2, label: 'Facebook' },
@@ -30,6 +12,27 @@ const socialLinks = [
 ]
 
 export function Footer() {
+  const t = useTranslations('Footer')
+
+  const companyLinks = [
+    { href: '/about', label: t('about') },
+    { href: '/contact', label: t('contact') },
+    { href: '/careers', label: t('careers') },
+  ]
+
+  const resourceLinks = [
+    { href: '/guides', label: t('guides') },
+    { href: '/blog', label: t('blog') },
+    { href: '/faqs', label: t('faqs') },
+  ]
+
+  const corridorLinks = [
+    { href: '/corridors/usd-to-ngn', label: t('usdToNgn') },
+    { href: '/corridors/usd-to-php', label: t('usdToPhp') },
+    { href: '/corridors/usd-to-inr', label: t('usdToInr') },
+    { href: '/corridors/usd-to-ghs', label: t('usdToGhs') },
+  ]
+
   return (
     <footer className="bg-gray-950 border-t border-white/10">
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -45,15 +48,13 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-gray-400 max-w-sm">
-              Compare remittance rates from top providers. Find the best
-              exchange rates, lowest fees, and fastest transfers for sending
-              money abroad.
+              {t('description')}
             </p>
 
             {/* Newsletter */}
             <div className="space-y-3">
               <h4 className="text-sm font-semibold text-white">
-                Get rate alerts
+                {t('getRateAlerts')}
               </h4>
               <form
                 onSubmit={(e) => e.preventDefault()}
@@ -71,7 +72,7 @@ export function Footer() {
                   type="submit"
                   className="rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 px-4 py-2.5 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
                 >
-                  Subscribe
+                  {t('subscribe')}
                 </button>
               </form>
             </div>
@@ -79,7 +80,7 @@ export function Footer() {
 
           {/* Company */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-white">Company</h4>
+            <h4 className="text-sm font-semibold text-white">{t('company')}</h4>
             <ul className="space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.href}>
@@ -96,7 +97,7 @@ export function Footer() {
 
           {/* Resources */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-white">Resources</h4>
+            <h4 className="text-sm font-semibold text-white">{t('resources')}</h4>
             <ul className="space-y-3">
               {resourceLinks.map((link) => (
                 <li key={link.href}>
@@ -113,7 +114,7 @@ export function Footer() {
 
           {/* Corridors */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-white">Corridors</h4>
+            <h4 className="text-sm font-semibold text-white">{t('corridorsTitle')}</h4>
             <ul className="space-y-3">
               {corridorLinks.map((link) => (
                 <li key={link.href}>
@@ -136,12 +137,10 @@ export function Footer() {
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="space-y-3">
             <p className="text-xs text-gray-500">
-              1StopRemittance earns commissions from partner links. This does
-              not affect our rankings or recommendations.
+              {t('disclosure')}
             </p>
             <p className="text-xs text-gray-500">
-              &copy; {new Date().getFullYear()} 1StopRemittance. All rights
-              reserved.
+              &copy; {new Date().getFullYear()} {t('copyright')}
             </p>
           </div>
 

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import './globals.css'
 import { CookieConsent } from '@/components/cookie-consent'
 import { NavBot } from '@/components/nav-bot'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin', 'latin-ext'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://1stopremittance.com'),
@@ -15,7 +17,6 @@ export const metadata: Metadata = {
   description:
     'Compare money transfer rates from Wise, Remitly, Western Union & more. Plus: form an LLC, get an EIN, register a trademark. All-in-one platform for diaspora entrepreneurs.',
   keywords: [
-    // Remittance keywords
     'send money to nigeria',
     'send money to philippines',
     'compare remittance rates',
@@ -31,7 +32,6 @@ export const metadata: Metadata = {
     'send money to india',
     'remittance fees comparison',
     'live exchange rates',
-    // Legal services keywords
     'form LLC online',
     'cheap LLC formation',
     'EIN application online',
@@ -88,7 +88,6 @@ export const metadata: Metadata = {
   },
   verification: {
     google: 'google-site-verification-token-here',
-    // bing: 'bing-verification-token',
   },
   alternates: {
     canonical: 'https://1stopremittance.com',
@@ -146,27 +145,29 @@ function JsonLd() {
   )
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en" className={`${inter.className} h-full antialiased`}>
+    <html lang={locale} className={`${inter.className} h-full antialiased`}>
       <head>
         <JsonLd />
-        {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Security headers via meta (additional layer) */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
       </head>
       <body className="min-h-full flex flex-col bg-gray-950 text-white">
-        {children}
-        {/* Global components */}
-        <CookieConsent />
-        <NavBot />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+          <CookieConsent />
+          <NavBot />
+        </NextIntlClientProvider>
       </body>
     </html>
   )

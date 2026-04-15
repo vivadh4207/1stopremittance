@@ -2,23 +2,26 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Send, Menu, X, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/compare', label: 'Compare Rates' },
-  { href: '/corridors', label: 'Corridors' },
-  { href: '/pricing', label: 'Pricing' },
-  { href: '/api-access', label: 'API', badge: 'B2B' },
-  { href: '/guides', label: 'Guides' },
-  { href: '/search', label: 'Search', icon: true },
-  { href: '/about', label: 'About' },
-]
+import { LanguageSwitcher } from '@/components/language-switcher'
 
 export function Navbar() {
+  const t = useTranslations('Navbar')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const navLinks = [
+    { href: '/', label: t('home') },
+    { href: '/compare', label: t('compareRates') },
+    { href: '/corridors', label: t('corridors') },
+    { href: '/pricing', label: t('pricing') },
+    { href: '/api-access', label: t('api'), badge: t('apiBadge') },
+    { href: '/guides', label: t('guides') },
+    { href: '/search', label: t('search'), icon: true },
+    { href: '/about', label: t('about') },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,13 +69,14 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:block">
+        {/* Desktop: Language Switcher + CTA */}
+        <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher compact />
           <Link
             href="/compare"
             className="inline-flex items-center rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-5 py-2 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
           >
-            Compare Now
+            {t('compareNow')}
           </Link>
         </div>
 
@@ -81,7 +85,7 @@ export function Navbar() {
           type="button"
           className="md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={isMobileMenuOpen ? t('closeMenu') : t('openMenu')}
         >
           {isMobileMenuOpen ? (
             <X className="h-6 w-6" />
@@ -95,6 +99,11 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-gray-950/95 backdrop-blur-xl border-b border-white/10">
           <div className="flex flex-col gap-4 px-6 py-6">
+            {/* Language switcher at top of mobile menu */}
+            <div className="pb-3 border-b border-white/10">
+              <LanguageSwitcher />
+            </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -116,7 +125,7 @@ export function Navbar() {
               className="mt-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-5 py-2.5 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Compare Now
+              {t('compareNow')}
             </Link>
           </div>
         </div>
