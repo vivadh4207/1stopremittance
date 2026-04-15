@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import {
   Search,
   ArrowRight,
@@ -12,10 +13,8 @@ import {
   Send,
   Award,
   Lock,
-  Heart,
   Mail,
   ChevronDown,
-  CheckCircle,
   ArrowUpRight,
   Clock,
   DollarSign,
@@ -107,7 +106,6 @@ function StarRating({ rating }: { rating: number }) {
 function AnimatedBackground() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Grid pattern */}
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
@@ -116,11 +114,8 @@ function AnimatedBackground() {
           backgroundSize: '64px 64px',
         }}
       />
-      {/* Emerald glow */}
       <div className="absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-emerald-500/20 blur-[128px] animate-pulse" />
-      {/* Cyan glow */}
       <div className="absolute top-1/3 right-0 h-[500px] w-[500px] rounded-full bg-cyan-500/20 blur-[128px] animate-pulse [animation-delay:1s]" />
-      {/* Purple glow */}
       <div className="absolute bottom-0 left-1/3 h-[400px] w-[400px] rounded-full bg-purple-500/15 blur-[128px] animate-pulse [animation-delay:2s]" />
     </div>
   )
@@ -131,6 +126,7 @@ function AnimatedBackground() {
 /* ------------------------------------------------------------------ */
 
 function HeroSection() {
+  const t = useTranslations('Hero')
   const [sendAmount, setSendAmount] = useState('1000')
   const [sendCurrency, setSendCurrency] = useState('USD')
   const [receiveCurrency, setReceiveCurrency] = useState('NGN')
@@ -140,7 +136,6 @@ function HeroSection() {
   const sendRef = useRef<HTMLDivElement>(null)
   const receiveRef = useRef<HTMLDivElement>(null)
 
-  // Close dropdowns on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (sendRef.current && !sendRef.current.contains(e.target as Node))
@@ -154,12 +149,10 @@ function HeroSection() {
 
   const amount = parseFloat(sendAmount) || 0
 
-  // Fetch live rates from API
-  const { data: rateData, loading: ratesLoading } = useRates({
+  const { data: rateData } = useRates({
     from: sendCurrency,
     to: receiveCurrency,
   })
-  // Use live rate if available, fallback to static
   const rate = rateData?.midMarketRate ?? getRate(sendCurrency, receiveCurrency)
   const receivedAmount = (amount * rate).toFixed(2)
 
@@ -167,10 +160,10 @@ function HeroSection() {
   const receiveCurrencyObj = CURRENCIES.find((c) => c.code === receiveCurrency)
 
   const stats = [
-    { label: 'Providers', value: '8+', icon: Globe },
-    { label: 'Countries', value: '30+', icon: TrendingUp },
-    { label: 'To Compare', value: '$0', icon: DollarSign },
-    { label: 'Updated', value: 'Live', icon: Zap },
+    { label: t('providers'), value: '8+', icon: Globe },
+    { label: t('countries'), value: '30+', icon: TrendingUp },
+    { label: t('toCompare'), value: '$0', icon: DollarSign },
+    { label: t('updated'), value: t('live'), icon: Zap },
   ]
 
   return (
@@ -181,49 +174,45 @@ function HeroSection() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           {/* Left column */}
           <div>
-            {/* Badge */}
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-sm font-medium text-emerald-400 mb-6">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
               </span>
-              Live rates from 8+ providers
+              {t('badge')}
             </span>
 
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Compare.{' '}
+              {t('titleCompare')}{' '}
               <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Save.
+                {t('titleSave')}
               </span>{' '}
-              Send Money{' '}
+              {t('titleSendMoney')}{' '}
               <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Smarter.
+                {t('titleSmarter')}
               </span>
             </h1>
 
             <p className="mt-6 max-w-xl text-lg text-gray-400 leading-relaxed">
-              Find the best rates to send money to Nigeria, Philippines &amp;
-              30+ countries. Compare Wise, Remitly, Western Union &amp; more.
+              {t('subtitle')}
             </p>
 
-            {/* CTAs */}
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/compare"
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-7 py-3 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
               >
-                Compare Rates Now
+                {t('compareRatesNow')}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/corridors"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/5"
               >
-                View Corridors
+                {t('viewCorridors')}
               </Link>
             </div>
 
-            {/* Stats */}
             <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4">
               {stats.map((s) => (
                 <div key={s.label} className="flex items-center gap-3">
@@ -242,24 +231,23 @@ function HeroSection() {
           {/* Right column: calculator card */}
           <div className="flex justify-center lg:justify-end">
             <GlassCard className="w-full max-w-md p-6 space-y-5">
-              {/* Title */}
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-white">
-                  Quick Rate Check
+                  {t('quickRateCheck')}
                 </h3>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-400">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
                   </span>
-                  Live
+                  {t('live')}
                 </span>
               </div>
 
               {/* You send */}
-              <div>
-                <label className="mb-1.5 block text-sm text-gray-400">
-                  You send
+              <div className="relative z-20">
+                <label className="mb-2 block text-sm font-medium text-gray-400">
+                  {t('youSend')}
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-gray-800/60 px-4 py-3">
                   <input
@@ -270,7 +258,6 @@ function HeroSection() {
                     className="flex-1 bg-transparent text-xl font-semibold text-white outline-none placeholder:text-gray-600 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     placeholder="0.00"
                   />
-                  {/* Currency selector */}
                   <div className="relative" ref={sendRef}>
                     <button
                       type="button"
@@ -282,7 +269,7 @@ function HeroSection() {
                       <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                     {showSendDropdown && (
-                      <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
                         {CURRENCIES.map((c) => (
                           <button
                             key={c.code}
@@ -322,9 +309,9 @@ function HeroSection() {
               </div>
 
               {/* They receive */}
-              <div>
-                <label className="mb-1.5 block text-sm text-gray-400">
-                  They receive
+              <div className="relative z-10">
+                <label className="mb-2 block text-sm font-medium text-gray-400">
+                  {t('theyReceive')}
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-gray-800/60 px-4 py-3">
                   <span className="flex-1 text-xl font-semibold text-white">
@@ -344,7 +331,7 @@ function HeroSection() {
                       <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                     {showReceiveDropdown && (
-                      <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
                         {CURRENCIES.map((c) => (
                           <button
                             key={c.code}
@@ -378,7 +365,7 @@ function HeroSection() {
                 href="/compare"
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3.5 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
               >
-                Compare All Providers
+                {t('compareAllProviders')}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </GlassCard>
@@ -394,22 +381,21 @@ function HeroSection() {
 /* ------------------------------------------------------------------ */
 
 function FeaturedCorridors() {
+  const t = useTranslations('Corridors')
   const popular = ['usd-to-ngn', 'usd-to-php']
-  // Fetch all rates once for corridor cards
   const { data: rateData } = useRates({ from: 'USD', to: 'NGN' })
 
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
-          badge="Top Routes"
-          title={<>Popular Corridors for Diaspora {rateData?.source && rateData.source !== 'fallback' && <span className="inline-flex items-center gap-1 ml-2 text-xs font-normal text-emerald-400"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />Live</span>}</>}
-          subtitle="Real-time mid-market rates for the most popular remittance corridors from the US."
+          badge={t('badge')}
+          title={<>{t('title')} {rateData?.source && rateData.source !== 'fallback' && <span className="inline-flex items-center gap-1 ml-2 text-xs font-normal text-emerald-400"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />Live</span>}</>}
+          subtitle={t('subtitle')}
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURED_CORRIDORS.map((corridor) => {
-            // Use live rates if available, fallback to static
             const rate = rateData?.rates
               ? (rateData.rates[corridor.to] || 1) / (rateData.rates[corridor.from] || 1)
               : getRate(corridor.from, corridor.to)
@@ -419,7 +405,7 @@ function FeaturedCorridors() {
                 <GlassCard className="group relative p-6 transition-colors hover:border-emerald-400/30">
                   {isMostPopular && (
                     <span className="absolute -top-3 right-4 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-3 py-0.5 text-xs font-semibold text-gray-950">
-                      Most Popular
+                      {t('mostPopular')}
                     </span>
                   )}
                   <div className="flex items-center gap-4">
@@ -436,13 +422,13 @@ function FeaturedCorridors() {
                   </div>
                   <div className="mt-4 flex items-end justify-between">
                     <div>
-                      <p className="text-xs text-gray-500">Mid-market rate</p>
+                      <p className="text-xs text-gray-500">{t('midMarketRate')}</p>
                       <p className="text-xl font-bold text-emerald-400">
                         1 {corridor.from} = {rate.toFixed(2)} {corridor.to}
                       </p>
                     </div>
                     <span className="flex items-center gap-1 text-sm font-medium text-gray-400 transition-colors group-hover:text-emerald-400">
-                      Compare Now
+                      {t('compareNow')}
                       <ArrowUpRight className="h-4 w-4" />
                     </span>
                   </div>
@@ -461,37 +447,20 @@ function FeaturedCorridors() {
 /* ------------------------------------------------------------------ */
 
 function HowItWorks() {
+  const t = useTranslations('HowItWorks')
   const steps = [
-    {
-      num: '01',
-      title: 'Compare Rates',
-      description:
-        'Enter the amount and corridor. We fetch live rates, fees, and speeds from 8+ providers instantly.',
-      icon: Search,
-    },
-    {
-      num: '02',
-      title: 'Choose Best Deal',
-      description:
-        'See a transparent side-by-side comparison. Sort by total received, fee, or delivery speed.',
-      icon: Award,
-    },
-    {
-      num: '03',
-      title: 'Send & Save',
-      description:
-        'Click through to your chosen provider and complete the transfer. Save up to 8x on fees.',
-      icon: Send,
-    },
+    { num: '01', title: t('step1Title'), description: t('step1Desc'), icon: Search },
+    { num: '02', title: t('step2Title'), description: t('step2Desc'), icon: Award },
+    { num: '03', title: t('step3Title'), description: t('step3Desc'), icon: Send },
   ]
 
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
-          badge="Simple Process"
-          title="How It Works"
-          subtitle="Three simple steps to find the best remittance deal."
+          badge={t('badge')}
+          title={t('title')}
+          subtitle={t('subtitle')}
         />
 
         <div className="grid gap-8 md:grid-cols-3">
@@ -520,13 +489,15 @@ function HowItWorks() {
 /* ------------------------------------------------------------------ */
 
 function ProviderShowcase() {
+  const t = useTranslations('Providers')
+
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
-          badge="Trusted Partners"
-          title="Trusted Providers We Compare"
-          subtitle="We compare rates and fees from the world's leading money transfer services so you don't have to."
+          badge={t('badge')}
+          title={t('title')}
+          subtitle={t('subtitle')}
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -542,11 +513,11 @@ function ProviderShowcase() {
                 <span className="text-xs text-gray-500">{p.rating}</span>
               </div>
               <p className="mt-1 text-xs text-gray-500">
-                {p.reviews} reviews
+                {p.reviews} {t('reviews')}
               </p>
               <div className="mt-4 flex items-center gap-1.5 text-xs text-gray-400">
                 <Clock className="h-3.5 w-3.5 text-emerald-400" />
-                Typical speed: {p.speed}
+                {t('typicalSpeed')} {p.speed}
               </div>
             </GlassCard>
           ))}
@@ -561,36 +532,21 @@ function ProviderShowcase() {
 /* ------------------------------------------------------------------ */
 
 function TrustSecurity() {
+  const t = useTranslations('Trust')
   const badges = [
-    {
-      title: 'Bank-Level Security',
-      description: '256-bit SSL encryption protects all your data.',
-      icon: Shield,
-    },
-    {
-      title: 'Data Protected',
-      description: 'We never store or share your personal information.',
-      icon: Lock,
-    },
-    {
-      title: 'Real-Time Rates',
-      description: 'Rates are fetched live from every provider for accuracy.',
-      icon: Zap,
-    },
-    {
-      title: 'Trusted by Users',
-      description: 'Thousands of diaspora members rely on us every month.',
-      icon: Users,
-    },
+    { title: t('bankSecurity'), description: t('bankSecurityDesc'), icon: Shield },
+    { title: t('dataProtected'), description: t('dataProtectedDesc'), icon: Lock },
+    { title: t('realTimeRates'), description: t('realTimeRatesDesc'), icon: Zap },
+    { title: t('trustedByUsers'), description: t('trustedByUsersDesc'), icon: Users },
   ]
 
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
-          badge="Your Data is Safe"
-          title="Trust & Security"
-          subtitle="We are a comparison platform. We never handle your money or personal data."
+          badge={t('badge')}
+          title={t('title')}
+          subtitle={t('subtitle')}
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -614,6 +570,7 @@ function TrustSecurity() {
 /* ------------------------------------------------------------------ */
 
 function Testimonials() {
+  const t = useTranslations('Testimonials')
   const testimonials = [
     {
       name: 'Chinedu Okafor',
@@ -642,28 +599,28 @@ function Testimonials() {
     <section className="relative py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
-          badge="Real Stories"
-          title="What Our Users Say"
-          subtitle="Hear from Nigerian and Filipino diaspora members who save money on every transfer."
+          badge={t('badge')}
+          title={t('title')}
+          subtitle={t('subtitle')}
         />
 
         <div className="grid gap-8 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <GlassCard key={t.name} className="p-6">
-              <StarRating rating={t.rating} />
+          {testimonials.map((testimonial) => (
+            <GlassCard key={testimonial.name} className="p-6">
+              <StarRating rating={testimonial.rating} />
               <p className="mt-4 text-sm leading-relaxed text-gray-300">
-                &ldquo;{t.quote}&rdquo;
+                &ldquo;{testimonial.quote}&rdquo;
               </p>
               <div className="mt-6 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 text-sm font-bold text-gray-950">
-                  {t.name
+                  {testimonial.name
                     .split(' ')
                     .map((n) => n[0])
                     .join('')}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">{t.name}</p>
-                  <p className="text-xs text-gray-500">{t.location}</p>
+                  <p className="text-sm font-semibold text-white">{testimonial.name}</p>
+                  <p className="text-xs text-gray-500">{testimonial.location}</p>
                 </div>
               </div>
             </GlassCard>
@@ -679,6 +636,7 @@ function Testimonials() {
 /* ------------------------------------------------------------------ */
 
 function EmailCTA() {
+  const t = useTranslations('EmailCTA')
   const [email, setEmail] = useState('')
 
   return (
@@ -690,11 +648,10 @@ function EmailCTA() {
           <Mail className="h-7 w-7 text-emerald-400" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-          Get Rate Alerts for Your Corridor
+          {t('title')}
         </h2>
         <p className="mt-4 text-lg text-gray-400">
-          Join 50,000+ diaspora members getting the best rates delivered to
-          their inbox.
+          {t('subtitle')}
         </p>
 
         <form
@@ -705,21 +662,75 @@ function EmailCTA() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
+            placeholder={t('placeholder')}
             className="flex-1 rounded-xl border border-white/10 bg-gray-800/60 px-5 py-3 text-sm text-white placeholder:text-gray-500 outline-none focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/30"
           />
           <button
             type="submit"
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
           >
-            Subscribe
+            {t('subscribe')}
             <ArrowRight className="h-4 w-4" />
           </button>
         </form>
 
         <p className="mt-4 text-xs text-gray-500">
-          Free forever. Unsubscribe anytime. No spam.
+          {t('disclaimer')}
         </p>
+      </div>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section 8 : Premium & API Promo                                   */
+/* ------------------------------------------------------------------ */
+
+function PremiumPromo() {
+  const t = useTranslations('Premium')
+  const perks = [
+    { icon: '🔔', title: t('unlimitedAlerts'), desc: t('unlimitedAlertsDesc') },
+    { icon: '📊', title: t('rateHistory'), desc: t('rateHistoryDesc') },
+    { icon: '🎯', title: t('predictions'), desc: t('predictionsDesc') },
+    { icon: '🔌', title: t('apiWhiteLabel'), desc: t('apiWhiteLabelDesc') },
+  ]
+
+  return (
+    <section className="relative py-24 overflow-hidden border-t border-white/10">
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5" />
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+        <SectionHeading
+          badge={t('badge')}
+          title={<>{t('title')} <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">{t('titleHighlight')}</span></>}
+          subtitle={t('subtitle')}
+        />
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+          {perks.map((p) => (
+            <GlassCard key={p.title} className="p-5">
+              <div className="text-3xl mb-3">{p.icon}</div>
+              <h3 className="text-base font-semibold text-white">{p.title}</h3>
+              <p className="text-xs text-gray-400 mt-1 leading-relaxed">{p.desc}</p>
+            </GlassCard>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-7 py-3 text-sm font-semibold text-gray-950 hover:opacity-90 transition-opacity"
+          >
+            {t('viewPlans')}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/api-access"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-7 py-3 text-sm font-semibold text-white hover:bg-white/5 transition-colors"
+          >
+            {t('exploreApi')}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
     </section>
   )
@@ -737,6 +748,7 @@ export default function HomePage() {
         <HeroSection />
         <FeaturedCorridors />
         <HowItWorks />
+        <PremiumPromo />
         <ProviderShowcase />
         <TrustSecurity />
         <Testimonials />

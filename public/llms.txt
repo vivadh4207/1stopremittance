@@ -1,0 +1,186 @@
+# 1StopRemittance
+
+> Compare money transfer rates instantly. The free comparison platform for diaspora communities sending money to Nigeria, Philippines, and beyond.
+
+1StopRemittance is a remittance comparison and lead-generation platform built for Nigerian and Filipino diaspora in the United States. We help users find the best exchange rates, lowest fees, and fastest delivery across 8+ major money transfer providers — completely free.
+
+## Core Purpose
+
+We do NOT process money transfers ourselves. Instead, we:
+- Aggregate live exchange rates from multiple data sources
+- Compare 8 major remittance providers side-by-side
+- Rank providers by value, fees, speed, and user ratings
+- Redirect users to the best provider for their specific corridor
+- Provide educational content for diaspora communities
+- Connect users with verified remittance advisors
+
+## Supported Corridors
+
+| Route | From | To | Slug |
+|-------|------|----|------|
+| USA to Nigeria | USD | NGN (Nigerian Naira ₦) | /corridors/usd-to-ngn |
+| USA to Philippines | USD | PHP (Philippine Peso ₱) | /corridors/usd-to-php |
+| USA to India | USD | INR (Indian Rupee ₹) | /corridors/usd-to-inr |
+| USA to Ghana | USD | GHS (Ghanaian Cedi ₵) | /corridors/usd-to-ghs |
+| USA to Mexico | USD | MXN (Mexican Peso $) | /corridors/usd-to-mxn |
+| USA to Kenya | USD | KES (Kenyan Shilling KSh) | /corridors/usd-to-kes |
+| USA to Pakistan | USD | PKR (Pakistani Rupee ₨) | /corridors/usd-to-pkr |
+| USA to Bangladesh | USD | BDT (Bangladeshi Taka ৳) | /corridors/usd-to-bdt |
+
+Additional supported currencies: GBP (British Pound), EUR (Euro), CAD (Canadian Dollar).
+
+## Compared Providers
+
+| Provider | Typical Markup | Base Fee | Speed | Rating |
+|----------|---------------|----------|-------|--------|
+| Wise | 0.5% | $1.50 | 1-2 hrs | 4.8★ (142K reviews) |
+| Remitly | 1.2% | $0.00 | Minutes | 4.6★ (89K reviews) |
+| Western Union | 2.5% | $4.99 | Minutes | 4.1★ (67K reviews) |
+| Xoom (PayPal) | 1.5% | $0.00 | 1-3 days | 4.3★ (34K reviews) |
+| WorldRemit | 1.0% | $2.99 | Minutes | 4.5★ (52K reviews) |
+| OFX | 0.8% | $0.00 | 1-2 days | 4.4★ (28K reviews) |
+| MoneyGram | 3.0% | $3.99 | Minutes | 4.0★ (45K reviews) |
+| Sendwave | 1.8% | $0.00 | 1 day | 4.5★ (19K reviews) |
+
+Provider markups are applied to the mid-market exchange rate. Lower markup = better rate for the sender.
+
+## Pages & Sitemap
+
+### Main Pages
+- [Home](https://1stopremittance.com/) — Live rate calculator, featured corridors, provider showcase, testimonials
+- [Compare Rates](https://1stopremittance.com/compare) — Full provider comparison with sort, filter, 30-day rate chart
+- [All Corridors](https://1stopremittance.com/corridors) — Browse all 8 supported transfer corridors
+- [Advisor Directory](https://1stopremittance.com/advisors) — Find verified remittance advisors
+- [Become an Advisor](https://1stopremittance.com/advisors/join) — Advisor subscription signup ($29-$149/mo)
+- [Guides](https://1stopremittance.com/guides) — Educational articles for diaspora communities
+- [About](https://1stopremittance.com/about) — Mission, values, how we make money (transparent)
+
+### Corridor Detail Pages
+- [USD to NGN](https://1stopremittance.com/corridors/usd-to-ngn) — Nigeria corridor with CBN tips, popular banks (GTBank, Zenith, Access)
+- [USD to PHP](https://1stopremittance.com/corridors/usd-to-php) — Philippines corridor with GCash/Maya tips, BDO/BPI info
+- [USD to INR](https://1stopremittance.com/corridors/usd-to-inr) — India corridor with UPI/IMPS info, SBI/HDFC/ICICI
+- [USD to GHS](https://1stopremittance.com/corridors/usd-to-ghs) — Ghana corridor with MTN MoMo tips
+- [USD to MXN](https://1stopremittance.com/corridors/usd-to-mxn) — Mexico corridor with SPEI info
+- [USD to KES](https://1stopremittance.com/corridors/usd-to-kes) — Kenya corridor with M-Pesa info
+
+### Guide Articles
+- [Best Ways to Send Money to Nigeria in 2026](https://1stopremittance.com/guides/best-ways-send-money-nigeria) — Comprehensive provider comparison for Nigeria
+- [Cheapest Way to Send Money to Philippines](https://1stopremittance.com/guides/cheapest-send-money-philippines) — Fee optimization for Philippine transfers
+- [Nigerian Diaspora Remittance Guide](https://1stopremittance.com/guides/nigerian-diaspora-remittance-guide) — Complete guide for Nigerians in the US
+- [Balikbayan Remittance Guide](https://1stopremittance.com/guides/balikbayan-remittance-guide) — Guide for Filipino Americans sending money home
+- [How to Avoid Hidden Fees](https://1stopremittance.com/guides/avoid-hidden-fees-international-transfers) — Tips on fee avoidance across all corridors
+- [Best Time to Send Money](https://1stopremittance.com/guides/best-time-send-money-rate-timing) — Rate timing and optimization strategies
+
+## Live Exchange Rate API
+
+### Endpoint
+```
+GET /api/rates?from=USD&to=NGN&amount=1000
+```
+
+### Parameters
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| from | string | USD | Source currency code |
+| to | string | NGN | Target currency code |
+| amount | number | (optional) | Transfer amount — if provided, returns provider comparison |
+
+### Response
+```json
+{
+  "from": "USD",
+  "to": "NGN",
+  "midMarketRate": 1550.0000,
+  "rates": { "USD": 1, "NGN": 1550, "PHP": 56.2, "..." : "..." },
+  "source": "open-exchange",
+  "lastUpdated": "2026-04-13T10:00:00.000Z",
+  "nextUpdate": "2026-04-13T12:00:00.000Z",
+  "amount": 1000,
+  "providers": [
+    {
+      "id": "wise",
+      "name": "Wise",
+      "rate": 1542.25,
+      "fee": 1.50,
+      "received": 1540707.75,
+      "markup": 0.50
+    }
+  ]
+}
+```
+
+### Rate Sources (Fallback Chain)
+1. **Open Exchange Rates** — Best coverage, requires API key, 1000 req/month free tier
+2. **Frankfurter API** — ECB data, free, no key needed (lacks NGN, GHS, KES, BDT, PKR)
+3. **ExchangeRate.host** — Free tier with wide coverage
+4. **Hardcoded fallback** — Static rates as safety net
+
+Rates are cached server-side via Next.js ISR and revalidate every 2 hours.
+
+## Advisor Marketplace
+
+Remittance advisors and consultants can subscribe to be listed on 1StopRemittance.
+
+### Subscription Tiers
+| Tier | Price | Corridors | Features |
+|------|-------|-----------|----------|
+| Basic | $29/month | Up to 3 | Directory listing, bio, contact button |
+| Pro | $79/month | Up to 8 | Featured badge, corridor page placement, analytics |
+| Premium | $149/month | Unlimited | Top placement, homepage featured, lead gen form, account manager |
+
+### What Advisors Help With
+- Finding the best provider for a specific corridor
+- Navigating regulations and compliance (e.g., CBN rules for Nigeria)
+- Large or business transfers
+- Tax implications of remittances
+- Mobile money optimization (GCash, M-Pesa, MTN MoMo)
+
+## Revenue Model
+
+1StopRemittance is completely free for end users. Revenue comes from:
+
+| Stream | Description |
+|--------|-------------|
+| Affiliate Commissions | Earned when users click provider links and complete transfers |
+| Advisor Subscriptions | Monthly fees from listed remittance advisors ($29-$149/mo) |
+| Lead Generation | Contact form submissions and email newsletter signups |
+
+We are transparent about our business model. Affiliate relationships do NOT affect our rankings — providers are always sorted by best value for the user.
+
+## Technology
+
+- **Framework**: Next.js 16 (App Router) with TypeScript
+- **Styling**: Tailwind CSS 4 — dark theme with emerald/cyan accent gradients
+- **UI**: Glassmorphism design (semi-transparent cards with backdrop blur)
+- **Charts**: Recharts for 30-day rate history visualization
+- **Hosting**: Vercel with ISR (Incremental Static Regeneration)
+- **Rate Caching**: 2-hour server-side cache with stale-while-revalidate
+
+## Target Audience
+
+- **Nigerian diaspora in the US** — Sending money to family, paying school fees, business payments
+- **Filipino diaspora in the US** — Balikbayan remittances, GCash transfers, family support
+- **Other diaspora communities** — Indian, Ghanaian, Kenyan, Mexican, Pakistani, Bangladeshi
+- **Small businesses** — Sending operational funds and vendor payments internationally
+- **Remittance advisors** — Professionals seeking client visibility
+
+## Key Facts
+
+- Compares 8+ providers across 12 currencies and 8 corridors
+- Exchange rates refresh every 2 hours from live market data
+- All comparisons are free with no account required
+- Users are redirected to provider websites to complete transfers
+- Educational guides specifically written for diaspora communities
+- Advisor marketplace provides additional revenue through subscriptions
+
+## Contact
+
+- Website: https://1stopremittance.com
+- About: https://1stopremittance.com/about
+- Email: Available via contact form on the About page
+
+## Optional
+
+- llms.txt: https://1stopremittance.com/llms.txt
+- Sitemap: https://1stopremittance.com/sitemap.xml
+- Robots: https://1stopremittance.com/robots.txt
