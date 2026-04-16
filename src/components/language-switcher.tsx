@@ -11,6 +11,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const currentLocale = useLocale() as Locale
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [pendingLocale, setPendingLocale] = useState<Locale | null>(null)
   const ref = useRef<HTMLDivElement>(null)
 
   // Close on outside click
@@ -24,10 +25,17 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  function switchLocale(locale: Locale) {
+  // Persist locale via cookie in an effect (never mutate browser globals in handlers)
+  useEffect(() => {
+    if (!pendingLocale) return
+    const locale = pendingLocale
     document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=${60 * 60 * 24 * 365};samesite=lax`
-    setOpen(false)
     router.refresh()
+  }, [pendingLocale, router])
+
+  function switchLocale(locale: Locale) {
+    setOpen(false)
+    setPendingLocale(locale)
   }
 
   return (
@@ -51,7 +59,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
+        <div className="absolute right-0 top-full z-[60] mt-2 w-52 max-h-[70vh] overflow-y-auto rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
           {locales.map((locale) => (
             <button
               key={locale}

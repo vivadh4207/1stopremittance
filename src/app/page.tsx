@@ -182,7 +182,7 @@ function HeroSection() {
               {t('badge')}
             </span>
 
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {t('titleCompare')}{' '}
               <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 {t('titleSave')}
@@ -269,7 +269,7 @@ function HeroSection() {
                       <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                     {showSendDropdown && (
-                      <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-48 max-h-64 overflow-y-auto rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
                         {CURRENCIES.map((c) => (
                           <button
                             key={c.code}
@@ -331,7 +331,7 @@ function HeroSection() {
                       <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                     {showReceiveDropdown && (
-                      <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
+                      <div className="absolute right-0 top-full z-50 mt-1 w-48 max-h-64 overflow-y-auto rounded-xl border border-white/10 bg-gray-900 py-1 shadow-2xl backdrop-blur-xl">
                         {CURRENCIES.map((c) => (
                           <button
                             key={c.code}
@@ -637,7 +637,6 @@ function Testimonials() {
 
 function EmailCTA() {
   const t = useTranslations('EmailCTA')
-  const [email, setEmail] = useState('')
 
   return (
     <section className="relative py-24 overflow-hidden">
@@ -654,25 +653,21 @@ function EmailCTA() {
           {t('subtitle')}
         </p>
 
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row"
-        >
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('placeholder')}
-            className="flex-1 rounded-xl border border-white/10 bg-gray-800/60 px-5 py-3 text-sm text-white placeholder:text-gray-500 outline-none focus:border-emerald-400/50 focus:ring-1 focus:ring-emerald-400/30"
-          />
-          <button
-            type="submit"
+        <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
+          <Link
+            href="/rate-alerts"
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3 text-sm font-semibold text-gray-950 transition-opacity hover:opacity-90"
           >
             {t('subscribe')}
             <ArrowRight className="h-4 w-4" />
-          </button>
-        </form>
+          </Link>
+          <Link
+            href="/faqs"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-gray-900/60 px-6 py-3 text-sm font-semibold text-gray-200 hover:border-emerald-400/40 hover:text-white transition"
+          >
+            How rate alerts work
+          </Link>
+        </div>
 
         <p className="mt-4 text-xs text-gray-500">
           {t('disclaimer')}

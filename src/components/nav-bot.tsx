@@ -40,14 +40,9 @@ export function NavBot() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Auto-open after 5 seconds on first visit (one-time)
+  // Mark as greeted on first render (no auto-open — let users click when ready)
   useEffect(() => {
-    if (hasGreeted) return
-    const timer = setTimeout(() => {
-      setOpen(true)
-      setHasGreeted(true)
-    }, 5000)
-    return () => clearTimeout(timer)
+    if (!hasGreeted) setHasGreeted(true)
   }, [hasGreeted])
 
   useEffect(() => {

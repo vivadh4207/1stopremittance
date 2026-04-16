@@ -8,6 +8,7 @@
  *
  * Rates are cached server-side via Next.js ISR (revalidates every 2 hours).
  */
+import { PROVIDERS } from '@/lib/constants'
 
 // Fallback rates — used when all APIs fail. Updated manually as a safety net.
 const FALLBACK_RATES: Record<string, number> = {
@@ -189,7 +190,6 @@ export function generateLiveProviderRates(
   to: string,
   rates: Record<string, number>
 ) {
-  const { PROVIDERS } = require('@/lib/constants')
   const baseRate = calcRate(rates, from, to)
 
   // Deterministic per-provider spreads (based on provider characteristics)

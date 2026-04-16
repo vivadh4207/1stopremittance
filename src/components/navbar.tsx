@@ -12,15 +12,22 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const navLinks = [
-    { href: '/', label: t('home') },
+  // Desktop shows only core links; mobile menu shows all
+  const coreLinks = [
     { href: '/compare', label: t('compareRates') },
     { href: '/corridors', label: t('corridors') },
+    { href: '/blog', label: 'Blog', badge: 'New' },
+    { href: '/rate-alerts', label: 'Rate Alerts', badge: 'Free' },
+    { href: '/about', label: t('about') },
+  ]
+
+  const allLinks = [
+    { href: '/', label: t('home') },
+    ...coreLinks,
     { href: '/pricing', label: t('pricing') },
     { href: '/api-access', label: t('api'), badge: t('apiBadge') },
-    { href: '/guides', label: t('guides') },
+    { href: '/faqs', label: 'FAQs' },
     { href: '/search', label: t('search'), icon: true },
-    { href: '/about', label: t('about') },
   ]
 
   useEffect(() => {
@@ -52,15 +59,14 @@ export function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
+          {coreLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className="relative text-sm text-gray-400 transition-colors hover:text-white flex items-center gap-1"
             >
-              {link.icon && <Search className="h-3.5 w-3.5" />}
               {link.label}
-              {link.badge && (
+              {'badge' in link && link.badge && (
                 <span className="ml-1 rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-gray-950 uppercase">
                   {link.badge}
                 </span>
@@ -104,16 +110,16 @@ export function Navbar() {
               <LanguageSwitcher />
             </div>
 
-            {navLinks.map((link) => (
+            {allLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className="flex items-center gap-2 text-gray-400 transition-colors hover:text-white"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {link.icon && <Search className="h-4 w-4" />}
+                {'icon' in link && link.icon && <Search className="h-4 w-4" />}
                 {link.label}
-                {link.badge && (
+                {'badge' in link && link.badge && (
                   <span className="rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-gray-950 uppercase">
                     {link.badge}
                   </span>

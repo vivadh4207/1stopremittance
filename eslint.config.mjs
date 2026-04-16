@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Legacy monolithic prototype (kept for reference; not built)
+    "1stop-remittance.jsx",
+    "**/1stop-remittance.jsx",
+    "*.jsx",
   ]),
 ]);
 
