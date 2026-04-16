@@ -1,7 +1,9 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getPublishedPosts, BLOG_CATEGORIES, type BlogPost } from '@/lib/blog'
-import { ArrowRight, Clock, Calendar, Tag } from 'lucide-react'
+import { ArrowRight, Clock, Calendar, Tag, PenLine } from 'lucide-react'
+import { Navbar } from '@/components/navbar'
+import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
   title: 'Blog — Money Transfer Tips, Guides & News | 1StopRemittance',
@@ -14,7 +16,6 @@ export const metadata: Metadata = {
   },
 }
 
-// Force dynamic so new posts appear immediately after publishing
 export const dynamic = 'force-dynamic'
 
 function categoryColor(cat: BlogPost['category']) {
@@ -32,13 +33,30 @@ function categoryEmoji(cat: BlogPost['category']) {
   return BLOG_CATEGORIES.find((c) => c.value === cat)?.emoji || '📝'
 }
 
-export default function BlogPage() {
-  const posts = getPublishedPosts()
+type SearchParams = Promise<{ category?: string }>
+
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: SearchParams
+}) {
+  const { category } = await searchParams
+  const allPosts = getPublishedPosts()
+  const validCategories = BLOG_CATEGORIES.map((c) => c.value)
+  const activeCategory = category && validCategories.includes(category as BlogPost['category'])
+    ? (category as BlogPost['category'])
+    : null
+
+  const posts = activeCategory
+    ? allPosts.filter((p) => p.category === activeCategory)
+    : allPosts
+
   const featured = posts[0]
   const rest = posts.slice(1)
-  const categories = BLOG_CATEGORIES
 
   return (
+    <>
+    <Navbar />
     <main className="min-h-screen bg-gray-950 pt-28 pb-20">
       <div className="mx-auto max-w-7xl px-6">
         {/* Header */}
@@ -62,24 +80,39 @@ export default function BlogPage() {
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           <Link
             href="/blog"
-            className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-400"
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              !activeCategory
+                ? 'border border-emerald-400/40 bg-emerald-400/10 text-emerald-400'
+                : 'border border-white/10 text-gray-400 hover:border-emerald-400/40 hover:text-white'
+            }`}
           >
-            All Posts
+            All Posts ({allPosts.length})
           </Link>
-          {categories.map((cat) => (
-            <Link
-              key={cat.value}
-              href={`/blog?category=${cat.value}`}
-              className="rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-gray-400 hover:border-emerald-400/40 hover:text-white transition-colors"
-            >
-              {cat.emoji} {cat.label}
-            </Link>
-          ))}
+          {BLOG_CATEGORIES.map((cat) => {
+            const count = allPosts.filter((p) => p.category === cat.value).length
+            if (count === 0) return null
+            return (
+              <Link
+                key={cat.value}
+                href={`/blog?category=${cat.value}`}
+                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  activeCategory === cat.value
+                    ? 'border border-emerald-400/40 bg-emerald-400/10 text-emerald-400'
+                    : 'border border-white/10 text-gray-400 hover:border-emerald-400/40 hover:text-white'
+                }`}
+              >
+                {cat.emoji} {cat.label} ({count})
+              </Link>
+            )
+          })}
         </div>
 
         {posts.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-gray-500 text-lg">No posts yet. Check back soon!</p>
+            <p className="text-gray-500 text-lg">No posts in this category yet.</p>
+            <Link href="/blog" className="mt-4 inline-block text-emerald-400 hover:underline text-sm">
+              View all posts
+            </Link>
           </div>
         ) : (
           <>
@@ -174,7 +207,25 @@ export default function BlogPage() {
             )}
           </>
         )}
+
+        {/* Submit CTA */}
+        <div className="mt-16 text-center">
+          <div className="rounded-2xl border border-white/10 bg-gray-900/50 p-8">
+            <h3 className="text-xl font-bold text-white mb-2">Have expertise to share?</h3>
+            <p className="text-gray-400 mb-6 max-w-md mx-auto">
+              Write about remittances, money transfers, or fintech. All submissions are reviewed by our editorial team.
+            </p>
+            <Link
+              href="/blog/submit"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3 text-sm font-semibold text-gray-950 hover:opacity-90 transition-opacity"
+            >
+              <PenLine className="h-4 w-4" /> Submit a Post
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
+    <Footer />
+    </>
   )
 }

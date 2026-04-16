@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPostBySlug, getPublishedPosts, BLOG_CATEGORIES } from '@/lib/blog'
 import { ArrowLeft, Clock, Calendar, Tag, Share2, User } from 'lucide-react'
+import { Navbar } from '@/components/navbar'
+import { Footer } from '@/components/footer'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,6 +64,8 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   }
 
   return (
+    <>
+    <Navbar />
     <main className="min-h-screen bg-gray-950 pt-28 pb-20">
       <script
         type="application/ld+json"
@@ -188,5 +192,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         )}
       </article>
     </main>
+    <Footer />
+    </>
   )
 }

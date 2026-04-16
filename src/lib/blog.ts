@@ -1,22 +1,30 @@
 import fs from 'fs'
 import path from 'path'
 
+export type PostStatus = 'pending' | 'approved' | 'rejected'
+
 export interface BlogPost {
   slug: string
   title: string
   excerpt: string
   content: string // HTML content
   author: string
+  authorEmail: string
   category: 'guides' | 'news' | 'tips' | 'corridors' | 'industry'
   tags: string[]
   coverImage: string // emoji or gradient placeholder
   published: boolean
+  status: PostStatus
   publishedAt: string // ISO date
   updatedAt: string
   readTime: number // minutes
   seoTitle: string
   seoDescription: string
+  rejectionReason?: string
 }
+
+// Admin email — only this user can approve/reject posts
+export const ADMIN_EMAIL = 'vivadh4207@gmail.com'
 
 const BLOG_FILE = path.join(process.cwd(), 'src/data/blog-posts.json')
 
@@ -31,13 +39,31 @@ export function getAllPosts(): BlogPost[] {
   ensureDataDir()
   if (!fs.existsSync(BLOG_FILE)) return []
   const data = fs.readFileSync(BLOG_FILE, 'utf-8')
-  return JSON.parse(data) as BlogPost[]
+  const posts = JSON.parse(data) as BlogPost[]
+  // Backfill status for legacy posts that don't have it
+  return posts.map((p) => ({
+    ...p,
+    status: p.status || 'approved',
+    authorEmail: p.authorEmail || ADMIN_EMAIL,
+  }))
 }
 
 export function getPublishedPosts(): BlogPost[] {
   return getAllPosts()
-    .filter((p) => p.published)
+    .filter((p) => p.published && p.status === 'approved')
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+}
+
+export function getPendingPosts(): BlogPost[] {
+  return getAllPosts()
+    .filter((p) => p.status === 'pending')
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+}
+
+export function getPostsByAuthorEmail(email: string): BlogPost[] {
+  return getAllPosts()
+    .filter((p) => p.authorEmail === email)
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 }
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
@@ -71,6 +97,30 @@ export function deletePost(slug: string): boolean {
   ensureDataDir()
   fs.writeFileSync(BLOG_FILE, JSON.stringify(filtered, null, 2))
   return true
+}
+
+export function approvePost(slug: string): BlogPost | null {
+  const posts = getAllPosts()
+  const post = posts.find((p) => p.slug === slug)
+  if (!post) return null
+  post.status = 'approved'
+  post.published = true
+  post.publishedAt = new Date().toISOString()
+  post.updatedAt = new Date().toISOString()
+  savePost(post)
+  return post
+}
+
+export function rejectPost(slug: string, reason?: string): BlogPost | null {
+  const posts = getAllPosts()
+  const post = posts.find((p) => p.slug === slug)
+  if (!post) return null
+  post.status = 'rejected'
+  post.published = false
+  post.rejectionReason = reason || 'Post did not meet our guidelines.'
+  post.updatedAt = new Date().toISOString()
+  savePost(post)
+  return post
 }
 
 export function slugify(text: string): string {

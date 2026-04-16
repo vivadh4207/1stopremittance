@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAllPosts, savePost, slugify, type BlogPost } from '@/lib/blog'
+import { getAllPosts, savePost, slugify, ADMIN_EMAIL, type BlogPost } from '@/lib/blog'
 
 // GET /api/blog — list all posts (including drafts, for admin)
 export async function GET() {
@@ -51,19 +51,21 @@ export async function POST(req: NextRequest) {
     const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length
     const readTime = Math.max(1, Math.ceil(wordCount / 200))
 
+    const existingPost = existingSlug ? getAllPosts().find((p) => p.slug === slug) : null
+
     const post: BlogPost = {
       slug,
       title,
       excerpt: excerpt || content.replace(/<[^>]*>/g, '').slice(0, 160) + '...',
       content,
-      author: '1Stop Editorial Team',
+      author: existingPost?.author || '1Stop Editorial Team',
+      authorEmail: existingPost?.authorEmail || ADMIN_EMAIL,
       category,
       tags: Array.isArray(tags) ? tags : tags ? tags.split(',').map((t: string) => t.trim()) : [],
       coverImage: coverImage || '📝',
       published: published ?? false,
-      publishedAt: existingSlug
-        ? (getAllPosts().find((p) => p.slug === slug)?.publishedAt || now)
-        : now,
+      status: published ? 'approved' : (existingPost?.status || 'approved'),
+      publishedAt: existingSlug ? (existingPost?.publishedAt || now) : now,
       updatedAt: now,
       readTime,
       seoTitle: seoTitle || title.slice(0, 60),
