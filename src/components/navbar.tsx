@@ -12,15 +12,22 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const navLinks = [
-    { href: '/', label: t('home') },
+  // Desktop shows only core links; mobile menu shows all
+  const coreLinks = [
     { href: '/compare', label: t('compareRates') },
     { href: '/corridors', label: t('corridors') },
+    { href: '/rate-alerts', label: 'Rate Alerts', badge: 'Free' },
+    { href: '/guides', label: t('guides') },
+    { href: '/about', label: t('about') },
+  ]
+
+  const allLinks = [
+    { href: '/', label: t('home') },
+    ...coreLinks,
     { href: '/pricing', label: t('pricing') },
     { href: '/api-access', label: t('api'), badge: t('apiBadge') },
-    { href: '/guides', label: t('guides') },
+    { href: '/faqs', label: 'FAQs' },
     { href: '/search', label: t('search'), icon: true },
-    { href: '/about', label: t('about') },
   ]
 
   useEffect(() => {
@@ -52,7 +59,7 @@ export function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
+          {coreLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -104,7 +111,7 @@ export function Navbar() {
               <LanguageSwitcher />
             </div>
 
-            {navLinks.map((link) => (
+            {allLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
