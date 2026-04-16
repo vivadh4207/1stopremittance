@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { getPublishedPosts } from '@/lib/blog'
 
 const BASE_URL = 'https://1stopremittance.com'
 
@@ -53,5 +54,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...corridorPages, ...guidePages]
+  const blogPosts = getPublishedPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
+  const blogIndex = {
+    url: `${BASE_URL}/blog`,
+    lastModified: new Date(),
+    changeFrequency: 'daily' as const,
+    priority: 0.8,
+  }
+
+  return [...staticPages, blogIndex, ...corridorPages, ...guidePages, ...blogPosts]
 }

@@ -16,8 +16,8 @@ export function Navbar() {
   const coreLinks = [
     { href: '/compare', label: t('compareRates') },
     { href: '/corridors', label: t('corridors') },
+    { href: '/blog', label: 'Blog', badge: 'New' },
     { href: '/rate-alerts', label: 'Rate Alerts', badge: 'Free' },
-    { href: '/guides', label: t('guides') },
     { href: '/about', label: t('about') },
   ]
 
@@ -65,9 +65,8 @@ export function Navbar() {
               href={link.href}
               className="relative text-sm text-gray-400 transition-colors hover:text-white flex items-center gap-1"
             >
-              {link.icon && <Search className="h-3.5 w-3.5" />}
               {link.label}
-              {link.badge && (
+              {'badge' in link && link.badge && (
                 <span className="ml-1 rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-gray-950 uppercase">
                   {link.badge}
                 </span>
@@ -118,9 +117,9 @@ export function Navbar() {
                 className="flex items-center gap-2 text-gray-400 transition-colors hover:text-white"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {link.icon && <Search className="h-4 w-4" />}
+                {'icon' in link && link.icon && <Search className="h-4 w-4" />}
                 {link.label}
-                {link.badge && (
+                {'badge' in link && link.badge && (
                   <span className="rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-gray-950 uppercase">
                     {link.badge}
                   </span>
