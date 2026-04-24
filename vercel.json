@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
@@ -13,4 +14,9 @@
       ]
     }
   ]
+=======
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "installCommand": "npm install"
+>>>>>>> f989f60a72658072c0df74c8944a7238257aa02f
 }
